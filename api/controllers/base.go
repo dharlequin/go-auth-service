@@ -42,6 +42,6 @@ func (server *Server) Initialize(DbUser, DbPassword, DbPort, DbHost, DbName stri
 
 //Run runs our server
 func (server *Server) Run(addr string) {
-	fmt.Println("Listening to port 8080")
+	fmt.Println("Listening to port 8181")
 	log.Fatal(http.ListenAndServe(addr, server.Router))
 }

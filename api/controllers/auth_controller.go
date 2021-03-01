@@ -102,25 +102,19 @@ func (server *Server) RegisterNewUser(w http.ResponseWriter, r *http.Request) {
 func (server *Server) ValidateSessionID(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie(cookieName)
 	if err != nil {
-		formattedError := formaterror.FormatError(err.Error())
-
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
 	if cookie == nil || cookie.Value == "" {
-		err = errors.New("Cookie not found")
+		err = errors.New("User not logged in")
 
-		formattedError := formaterror.FormatError(err.Error())
-
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	user, err := auth.GetUserDataFromSessions(cookie.Value)
 	if err != nil {
-		formattedError := formaterror.FormatError(err.Error())
-
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -129,4 +123,12 @@ func (server *Server) ValidateSessionID(w http.ResponseWriter, r *http.Request) 
 	w.Header().Set("X-Email", user.Email)
 
 	responses.JSON(w, http.StatusOK, user)
+}
+
+//Logout removes http Cookie
+func (server *Server) Logout(w http.ResponseWriter, r *http.Request) {
+	cookie := http.Cookie{Name: cookieName, Value: ""}
+	http.SetCookie(w, &cookie)
+
+	responses.JSON(w, http.StatusOK, "User logged out")
 }

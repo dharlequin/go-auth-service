@@ -1,6 +1,6 @@
 package controllers
 
-import(
+import (
 	"github.com/dharlequin/go-auth-service/api/middlewares"
 )
 
@@ -13,4 +13,5 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(s.Login)).Methods("POST")
 	s.Router.HandleFunc("/register", middlewares.SetMiddlewareJSON(s.RegisterNewUser)).Methods("POST")
 	s.Router.HandleFunc("/auth", middlewares.SetMiddlewareJSON(s.ValidateSessionID)).Methods("GET")
+	s.Router.HandleFunc("/logout", middlewares.SetMiddlewareJSON(s.Logout)).Methods("GET")
 }

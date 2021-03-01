@@ -8,5 +8,5 @@ import (
 
 //Home welcomes us in our API
 func (server *Server) Home(w http.ResponseWriter, r *http.Request) {
-	responses.JSON(w, http.StatusOK, "Welcome To This Awesome Auth API")
+	responses.JSON(w, http.StatusOK, "Welcome To This Awesome Auth API, version 1.0.0-1")
 }
