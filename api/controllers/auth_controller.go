@@ -67,6 +67,11 @@ func (server *Server) signIn(email, password string) (string, error) {
 	return auth.CreateSession(&user), nil
 }
 
+//SignIn is a placeholder route for API Gateway
+func (server *Server) SignIn(w http.ResponseWriter, r *http.Request) {
+	responses.JSON(w, http.StatusOK, "Use login endpoint and provide credentials")
+}
+
 //RegisterNewUser creates new User and saves to DB
 func (server *Server) RegisterNewUser(w http.ResponseWriter, r *http.Request) {
 
@@ -102,19 +107,19 @@ func (server *Server) RegisterNewUser(w http.ResponseWriter, r *http.Request) {
 func (server *Server) ValidateSessionID(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie(cookieName)
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		responses.ERROR(w, http.StatusUnauthorized, err)
 		return
 	}
 	if cookie == nil || cookie.Value == "" {
 		err = errors.New("User not logged in")
 
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		responses.ERROR(w, http.StatusUnauthorized, err)
 		return
 	}
 
 	user, err := auth.GetUserDataFromSessions(cookie.Value)
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		responses.ERROR(w, http.StatusUnauthorized, err)
 		return
 	}
 
